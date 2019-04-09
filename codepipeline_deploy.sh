@@ -21,7 +21,7 @@ export PARENT_COMMIT_FLAG=""
 if [ -z "$BRANCH_COMMIT_ID" ]; then
     PARENT_COMMIT_FLAG="--parent-commit-id=$BRANCH_COMMIT_ID"
 
-aws codecommit put-file --repository-name "$CC_REPO_NAME" --branch-name mainline --file-content '{"application_version": "1.0.0.1"}' --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
+aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content '{"application_version": "1.0.0.1"}' --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
 
 
 # Move artifacts to shared/<version>/ and version.json to shared/
