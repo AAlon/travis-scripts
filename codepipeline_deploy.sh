@@ -31,7 +31,14 @@ echo "Parent commit flag: $PARENT_COMMIT_FLAG"
 VERSION_FILE_CONTENTS=`cat $TRAVIS_BUILD_DIR/version.json`
 echo "File contents: $VERSION_FILE_CONTENTS"
 
-aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content '{"application_version": "1.1.0.56"}' --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
+echo "New Sample app version: $SA_VERSION"
+
+if [ -z "$SA_VERSION" ]; then
+    echo "No application version set, did add_tag run?"
+    exit 1
+fi
+
+aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content "{\"application_version\": \"$SA_VERSION\"}" --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
 
 
 # Move artifacts to shared/<version>/ and version.json to shared/
