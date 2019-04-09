@@ -8,7 +8,10 @@ if [ ! -z "${TRAVIS_TAG}" ]; then
 fi
 
 
-echo "Running codepipeline_deploy"
+echo "Running codepipeline_deploy with repo $APP_MANIFEST_REPO"
+export APP_MANIFEST_REPO="AppManifest-$SA_NAME-$ROS_DISTRO-gazebo$GAZEBO_VERSION"
+echo "2. Running codepipeline_deploy with repo $APP_MANIFEST_REPO"
+
 # Get the HEAD commit ID for version.json in master branch if exists
 BRANCH_INFO=`aws codecommit get-branch --repository-name $CC_REPO_NAME --branch-name mainline`
 if [ $? -ne 0 ]; then
