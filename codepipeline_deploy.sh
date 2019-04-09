@@ -18,9 +18,15 @@ else
     export BRANCH_COMMIT_ID=`echo $BRANCH_INFO | jq -r '.branch.commitId'`
 fi
 
+echo "Branch info: $BRANCH_INFO"
+echo "Branch commit id: $BRANCH_COMMIT_ID"
+
 export PARENT_COMMIT_FLAG=""
-if [ -z "$BRANCH_COMMIT_ID" ]; then
+if [ -n "$BRANCH_COMMIT_ID" ]; then
     PARENT_COMMIT_FLAG="--parent-commit-id=$BRANCH_COMMIT_ID"
+fi
+
+echo "Parent commit flag: $PARENT_COMMIT_FLAG"
 
 aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content '{"application_version": "1.0.0.1"}' --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
 
@@ -35,11 +41,11 @@ echo -----
 ls "$TRAVIS_BUILD_DIR/shared"
 echo here
 
-exit 0
-# Clone the CC repository where version.json lives and commit the version.json file produced by current build
-git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
-cd cc-repo-for-version-file
-cp "$TRAVIS_BUILD_DIR/shared/version.json" version.json
-git add version.json
-git commit -m "updating version.json file by commitId: $TRAVIS_COMMIT_MESSAGE"
-git push
+# exit 0
+# # Clone the CC repository where version.json lives and commit the version.json file produced by current build
+# git clone "$CC_REPO_CLONE_URL_HTTP" cc-repo-for-version-file
+# cd cc-repo-for-version-file
+# cp "$TRAVIS_BUILD_DIR/shared/version.json" version.json
+# git add version.json
+# git commit -m "updating version.json file by commitId: $TRAVIS_COMMIT_MESSAGE"
+# git push
