@@ -9,13 +9,11 @@ fi
 
 
 echo "Running codepipeline_deploy with repo $APP_MANIFEST_REPO"
-export APP_MANIFEST_REPO="AppManifest-$SA_NAME-$ROS_DISTRO-gazebo$GAZEBO_VERSION"
-echo "2. Running codepipeline_deploy with repo $APP_MANIFEST_REPO"
 
 # Get the HEAD commit ID for version.json in master branch if exists
-BRANCH_INFO=`aws codecommit get-branch --repository-name $CC_REPO_NAME --branch-name mainline`
+BRANCH_INFO=`aws codecommit get-branch --repository-name $APP_MANIFEST_REPO --branch-name mainline`
 if [ $? -ne 0 ]; then
-    echo "Could not find mainline branch for repository $CC_REPO_NAME. Creating first commit."
+    echo "Could not find mainline branch for repository $APP_MANIFEST_REPO. Creating first commit."
 else
     export BRANCH_COMMIT_ID=`echo $BRANCH_INFO | jq -r '.branch.commitId'`
 fi
