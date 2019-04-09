@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 if [ ! -z "${TRAVIS_TAG}" ]; then
     # Do not run for builds triggered by tagging.
@@ -28,13 +28,17 @@ fi
 
 echo "Parent commit flag: $PARENT_COMMIT_FLAG"
 
+VERSION_FILE_CONTENTS=`cat $TRAVIS_BUILD_DIR/version.json`
+echo "File contents: $VERSION_FILE_CONTENTS"
+
 aws codecommit put-file --repository-name "$APP_MANIFEST_REPO" --branch-name mainline --file-content '{"application_version": "1.1.0.56"}' --file-path "/version.json" --commit-message "Bumping version" --name "$GH_USER_NAME" --email "$GH_USER_EMAIL" $PARENT_COMMIT_FLAG
 
 
 # Move artifacts to shared/<version>/ and version.json to shared/
+echo "Build dir contents:"
+ls "$TRAVIS_BUILD_DIR"
 mkdir $SA_VERSION && mv $TRAVIS_BUILD_DIR/shared/* $SA_VERSION && mv $SA_VERSION $TRAVIS_BUILD_DIR/shared/
 cp "$TRAVIS_BUILD_DIR/version.json" "$TRAVIS_BUILD_DIR/shared/version.json"
-ls "$TRAVIS_BUILD_DIR"
 echo -----
 ls $TRAVIS_BUILD_DIR
 echo -----
