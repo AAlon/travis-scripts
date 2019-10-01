@@ -49,7 +49,6 @@ jobs:
           script: "Performing mock deploy stage"
           on:
             branch: master
-            
     - stage: Build ROS1 Cloud Extension
       env:
         - ROS_VERSION=1
