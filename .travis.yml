@@ -1,0 +1,43 @@
+sudo: required 
+language: generic 
+compiler:
+  - gcc
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+    recipients:
+      - avishaya@amazon.com
+      - avishayalon@gmail.com
+env:
+  global:
+    - GH_USER_NAME="travis-ci"
+    - GH_USER_EMAIL="travis@travis-ci.org"
+    - AWS_DEFAULT_REGION=us-west-2
+before_install:
+- pip install --user awscli
+install:
+  #- git clone -b ros1 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld helloworld_ros1
+  - git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld helloworld_ros2
+  - cp -R ${TRAVIS_BUILD_DIR} .ros_ci
+before_deploy:
+- ". .ros_ci/before_deploy.sh"
+jobs:
+  include:
+    - stage: Build & Bundle
+      env: 
+        - ROS_DISTRO=dashing
+        - ROS_VERSION=2 
+        - GAZEBO_VERSION=9
+        - WORKSPACES="robot_ws"
+        - SA_NAME=hello-world
+        - SA_PACKAGE_NAME=hello_world_robot
+        - NO_TEST=true
+      script:
+        - mv helloworld_ros2 ${TRAVIS_BUILD_DIR}
+        - ". .ros_ci/add_tag.sh"
+        - set +e; while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
+        - ".ros_ci/ce_build.sh"
+        - kill %1
+after_deploy:
+- .ros_ci/post_deploy.sh
