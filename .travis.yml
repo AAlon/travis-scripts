@@ -29,7 +29,7 @@ before_deploy:
 - . .ros_ci/before_deploy.sh && set +e
 jobs:
   include:
-    - stage: Build
+    - stage: Build Downstream Consumers
       name: "Build & Bundle ROS1 Sample App"
       env: 
         - ROS_VERSION=1
