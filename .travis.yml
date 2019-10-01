@@ -74,7 +74,7 @@ jobs:
           on:
             branch: master
 
-      name: "Build ROS1 Cloud Extension"
+    - name: "Build ROS1 Cloud Extension"
       env:
         - PACKAGE_NAMES=aws_ros1_common
         - ROS_VERSION=1
@@ -86,7 +86,7 @@ jobs:
       before_deploy: # Blank override - no deploy stage for CEs
       after_deploy: # Blank override - no deploy stage for CEs
       
-      name: "Build ROS2 Cloud Extension"
+    - name: "Build ROS2 Cloud Extension"
       env:
         - PACKAGE_NAMES=aws_ros2_common
         - ROS_VERSION=2
