@@ -21,7 +21,9 @@ install:
   - git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld ${TRAVIS_BUILD_DIR}/../helloworld_ros2
   - cp -R ${TRAVIS_BUILD_DIR} ${TRAVIS_BUILD_DIR}/../.ros_ci
   - mv ${TRAVIS_BUILD_DIR}/../helloworld_ros2 ${TRAVIS_BUILD_DIR}
-  - mv ${TRAVIS_BUILD_DIR}/../.ros_ci ${TRAVIS_BUILD_DIR}/.ros_ci
+  - mv ${TRAVIS_BUILD_DIR}/../.ros_ci ${TRAVIS_BUILD_DIR}/helloworld_ros2/.ros_ci
+  - export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}/helloworld_ros2
+  - cd ${TRAVIS_BUILD_DIR}
 before_deploy:
 - ". .ros_ci/before_deploy.sh"
 jobs:
@@ -36,8 +38,6 @@ jobs:
         - SA_PACKAGE_NAME=hello_world_robot
         - NO_TEST=true
       script:
-        - mv helloworld_ros2 ${TRAVIS_BUILD_DIR}
-        - cd helloworld_ros2
         - ". .ros_ci/add_tag.sh"
         - set +e; while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
         - ".ros_ci/ce_build.sh"
