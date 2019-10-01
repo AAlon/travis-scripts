@@ -24,6 +24,8 @@ install:
   - export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}/ros_app
   - cd ${TRAVIS_BUILD_DIR}
 before_deploy:
+# Skip querying of S3
+- sed -i 's/.*aws s3 ls.*//g' .ros_ci/before_deploy.sh
 - . .ros_ci/before_deploy.sh && set +e
 jobs:
   include:
