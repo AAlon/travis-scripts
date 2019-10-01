@@ -52,7 +52,7 @@ jobs:
           on:
             branch: master
             
-      name: "Build & Bundle ROS2 Sample App"
+    - name: "Build & Bundle ROS2 Sample App"
       env: 
         - ROS_VERSION=2 
         - ROS_DISTRO=dashing
