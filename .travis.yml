@@ -52,12 +52,10 @@ jobs:
     - stage: Build ROS1 Cloud Extension
       env:
         - ROS_VERSION=1
+        - ROS_DISTRO=kinetic
         - PACKAGE_NAMES=aws_ros1_common
         - CLONE_URL=https://github.com/aws-robotics/utils-ros1
         - CLONE_BRANCH=master
-        matrix:
-          - ROS_DISTRO=melodic
-          - ROS_DISTRO=kinetic
       script:
         - ".ros_ci/ce_build.sh"
       before_deploy: # Blank
