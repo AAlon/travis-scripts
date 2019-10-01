@@ -24,7 +24,7 @@ install:
   - export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}/ros_app
   - cd ${TRAVIS_BUILD_DIR}
 before_deploy:
-- ". .ros_ci/before_deploy.sh" && set +e
+- . .ros_ci/before_deploy.sh && set +e
 jobs:
   include:
     - stage: Build & Bundle ROS1 Sample App
@@ -39,7 +39,7 @@ jobs:
         - CLONE_URL=https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld
         - CLONE_BRANCH=ros1
       script:
-        - ". .ros_ci/add_tag.sh" && set +e
+        - . .ros_ci/add_tag.sh && set +e
         - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
         - ".ros_ci/ce_build.sh"
         - kill %1
@@ -61,7 +61,7 @@ jobs:
         - CLONE_URL=https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld
         - CLONE_BRANCH=ros2
       script:
-        - ". .ros_ci/add_tag.sh" && set +e
+        - . .ros_ci/add_tag.sh && set +e
         - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
         - ".ros_ci/ce_build.sh"
         - kill %1
