@@ -18,8 +18,10 @@ before_install:
 - pip install --user awscli
 install:
   #- git clone -b ros1 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld helloworld_ros1
-  - git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld helloworld_ros2
-  - cp -R ${TRAVIS_BUILD_DIR} .ros_ci
+  - git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld ${TRAVIS_BUILD_DIR}/../helloworld_ros2
+  - cp -R ${TRAVIS_BUILD_DIR} ${TRAVIS_BUILD_DIR}/../.ros_ci
+  - mv ${TRAVIS_BUILD_DIR}/../helloworld_ros2 ${TRAVIS_BUILD_DIR}
+  - mv ${TRAVIS_BUILD_DIR}/../.ros_ci ${TRAVIS_BUILD_DIR}/.ros_ci
 before_deploy:
 - ". .ros_ci/before_deploy.sh"
 jobs:
