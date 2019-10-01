@@ -30,8 +30,8 @@ jobs:
   include:
     - stage: Build & Bundle ROS2 Sample App
       env: 
-        - ROS_DISTRO=dashing
         - ROS_VERSION=2 
+        - ROS_DISTRO=dashing
         - GAZEBO_VERSION=9
         - WORKSPACES="robot_ws"
         - SA_NAME=hello-world
@@ -64,7 +64,8 @@ jobs:
     - stage: Build ROS2 Cloud Extension
       env:
         - PACKAGE_NAMES=aws_ros2_common
-        - ROS_VERSION=2 #ROS_DISTRO=dashing
+        - ROS_VERSION=2
+        - ROS_DISTRO=dashing
         - CLONE_URL="https://github.com/aws-robotics/utils-ros2" 
         - CLONE_BRANCH=master
       script:
