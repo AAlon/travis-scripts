@@ -18,17 +18,17 @@ before_install:
 - pip install --user awscli
 install:
   #- git clone -b ros1 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld helloworld_ros1
-  - git clone -b ros2 https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld ${TRAVIS_BUILD_DIR}/../helloworld_ros2
+  - git clone -b ${CLONE_BRANCH} ${CLONE_URL} ${TRAVIS_BUILD_DIR}/../ros_app
   - cp -R ${TRAVIS_BUILD_DIR} ${TRAVIS_BUILD_DIR}/../.ros_ci
-  - mv ${TRAVIS_BUILD_DIR}/../helloworld_ros2 ${TRAVIS_BUILD_DIR}
-  - mv ${TRAVIS_BUILD_DIR}/../.ros_ci ${TRAVIS_BUILD_DIR}/helloworld_ros2/.ros_ci
-  - export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}/helloworld_ros2
+  - mv ${TRAVIS_BUILD_DIR}/../ros_app ${TRAVIS_BUILD_DIR}
+  - mv ${TRAVIS_BUILD_DIR}/../.ros_ci ${TRAVIS_BUILD_DIR}/ros_app/.ros_ci
+  - export TRAVIS_BUILD_DIR=${TRAVIS_BUILD_DIR}/ros_app
   - cd ${TRAVIS_BUILD_DIR}
 before_deploy:
 - ". .ros_ci/before_deploy.sh"
 jobs:
   include:
-    - stage: Build & Bundle
+    - stage: Build & Bundle ROS2 Sample App
       env: 
         - ROS_DISTRO=dashing
         - ROS_VERSION=2 
@@ -37,10 +37,32 @@ jobs:
         - SA_NAME=hello-world
         - SA_PACKAGE_NAME=hello_world_robot
         - NO_TEST=true
+        - CLONE_URL=https://github.com/aws-robotics/aws-robomaker-sample-application-helloworld
+        - CLONE_BRANCH=ros2
       script:
         - ". .ros_ci/add_tag.sh"
         - set +e; while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
         - ".ros_ci/ce_build.sh"
         - kill %1
+      deploy:
+        - provider: script
+          script: "Performing mock deploy stage"
+          on:
+            branch: master
+            
+    - stage: Build ROS1 Cloud Extension
+      env:
+        - ROS_VERSION=1
+        - PACKAGE_NAMES=aws_ros1_common
+        - CLONE_URL=https://github.com/aws-robotics/utils-ros1
+        - CLONE_BRANCH=master
+        matrix:
+          - ROS_DISTRO=melodic
+          - ROS_DISTRO=kinetic
+      script:
+        - ".ros_ci/ce_build.sh"
+      before_deploy: # Blank
+      after_deploy: # Blank
+      
 after_deploy:
 - .ros_ci/post_deploy.sh
