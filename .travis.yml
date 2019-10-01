@@ -29,7 +29,8 @@ before_deploy:
 - . .ros_ci/before_deploy.sh && set +e
 jobs:
   include:
-    - stage: Build & Bundle ROS1 Sample App
+    - stage: Build
+      name: "Build & Bundle ROS1 Sample App"
       env: 
         - ROS_VERSION=1
         - ROS_DISTRO=melodic
@@ -51,7 +52,7 @@ jobs:
           on:
             branch: master
             
-    - stage: Build & Bundle ROS2 Sample App
+      name: "Build & Bundle ROS2 Sample App"
       env: 
         - ROS_VERSION=2 
         - ROS_DISTRO=dashing
@@ -73,7 +74,7 @@ jobs:
           on:
             branch: master
 
-    - stage: Build ROS1 Cloud Extension
+      name: "Build ROS1 Cloud Extension"
       env:
         - PACKAGE_NAMES=aws_ros1_common
         - ROS_VERSION=1
@@ -85,7 +86,7 @@ jobs:
       before_deploy: # Blank override - no deploy stage for CEs
       after_deploy: # Blank override - no deploy stage for CEs
       
-    - stage: Build ROS2 Cloud Extension
+      name: "Build ROS2 Cloud Extension"
       env:
         - PACKAGE_NAMES=aws_ros2_common
         - ROS_VERSION=2
